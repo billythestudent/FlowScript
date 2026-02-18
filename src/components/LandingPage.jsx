@@ -1,4 +1,6 @@
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import CodeConverter from './CodeConverter';
 
 const languages = [
   {
@@ -88,174 +90,302 @@ const floatingVariants = {
 };
 
 export default function LandingPage({ onSelectLanguage }) {
+  const converterRef = useRef(null);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+
+  const scrollToConverter = () => {
+    converterRef.current?.scrollIntoView({ behavior: 'smooth' });
+    setShowScrollHint(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center p-8 overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-        />
-      </div>
-
-      {/* Grid pattern overlay */}
-      <div 
-        className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                           linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }}
-      />
-
-      {/* Content */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 text-center max-w-4xl mx-auto"
-      >
-        {/* Logo and Title */}
-        <motion.div variants={itemVariants} className="mb-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-y-auto">
+      {/* Hero Section */}
+      <section className="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
-            variants={floatingVariants}
-            animate="animate"
-            className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-2xl mb-6"
-            style={{ boxShadow: '0 0 60px rgba(99, 102, 241, 0.4)' }}
-          >
-            <svg className="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
-            </svg>
-          </motion.div>
-          
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent mb-4">
-            FlowScript
-          </h1>
-          
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Görsel blokları sürükle-bırak yöntemiyle bağlayarak kod oluşturun.
-            Programlamayı hiç bu kadar eğlenceli bulmamıştınız!
-          </p>
-        </motion.div>
+            className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+          />
+        </div>
 
-        {/* Language Selection */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <h2 className="text-2xl font-semibold text-slate-300 mb-8">
-            Bir programlama dili seçin
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-            {languages.map((lang, index) => (
-              <motion.button
-                key={lang.id}
-                onClick={() => lang.available && onSelectLanguage(lang.id)}
-                disabled={!lang.available}
-                className={`relative group p-6 rounded-2xl border transition-all duration-300 ${
-                  lang.available
-                    ? 'bg-slate-800/50 border-slate-700 hover:border-indigo-500/50 cursor-pointer'
-                    : 'bg-slate-800/30 border-slate-700/50 cursor-not-allowed opacity-60'
-                }`}
-                whileHover={lang.available ? { scale: 1.05, y: -5 } : {}}
-                whileTap={lang.available ? { scale: 0.98 } : {}}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: lang.available ? 1 : 0.6, y: 0 }}
-                transition={{ delay: 0.5 + index * 0.1 }}
-                style={{
-                  boxShadow: lang.available ? `0 0 30px ${lang.shadowColor}` : 'none',
-                }}
-              >
-                {/* Glow effect on hover */}
-                {lang.available && (
-                  <div 
-                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      background: `radial-gradient(circle at center, ${lang.shadowColor} 0%, transparent 70%)`,
-                    }}
-                  />
-                )}
+        {/* Grid pattern overlay */}
+        <div 
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px',
+          }}
+        />
 
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                    {lang.icon}
-                  </div>
-                  
-                  <h3 className={`text-xl font-bold mb-2 bg-gradient-to-r ${lang.gradient} bg-clip-text text-transparent`}>
-                    {lang.name}
-                  </h3>
-                  
-                  <p className="text-sm text-slate-400 text-center">
-                    {lang.description}
-                  </p>
-
-                  {!lang.available && (
-                    <span className="mt-3 px-3 py-1 bg-slate-700/50 text-slate-400 text-xs rounded-full">
-                      Yakında
-                    </span>
-                  )}
-
-                  {lang.available && (
-                    <motion.span 
-                      className="mt-3 px-4 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm rounded-full font-medium"
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      Başla →
-                    </motion.span>
-                  )}
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Features */}
-        <motion.div variants={itemVariants} className="mt-16">
-          <div className="flex flex-wrap justify-center gap-8 text-slate-400">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Sürükle & Bırak</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Gerçek Zamanlı Kod</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Anında Çalıştırma</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Dışa Aktarma</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Footer */}
-        <motion.div 
-          variants={itemVariants} 
-          className="mt-16 text-slate-500 text-sm"
+        {/* Content */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="relative z-10 text-center max-w-4xl mx-auto"
         >
-          <p>FlowScript © 2026 • Görsel Programlama Aracı</p>
+          {/* Logo and Title */}
+          <motion.div variants={itemVariants} className="mb-12">
+            <motion.div
+              variants={floatingVariants}
+              animate="animate"
+              className="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-2xl mb-6"
+              style={{ boxShadow: '0 0 60px rgba(99, 102, 241, 0.4)' }}
+            >
+              <svg className="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
+              </svg>
+            </motion.div>
+            
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent mb-4">
+              FlowScript
+            </h1>
+            
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Görsel blokları sürükle-bırak yöntemiyle bağlayarak kod oluşturun.
+              Programlamayı hiç bu kadar eğlenceli bulmamıştınız!
+            </p>
+          </motion.div>
+
+          {/* Language Selection */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <h2 className="text-2xl font-semibold text-slate-300 mb-8">
+              Bir programlama dili seçin
+            </h2>
+            
+            <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+              {languages.map((lang, index) => (
+                <motion.button
+                  key={lang.id}
+                  onClick={() => lang.available && onSelectLanguage(lang.id)}
+                  disabled={!lang.available}
+                  className={`relative group p-6 rounded-2xl border transition-all duration-300 ${
+                    lang.available
+                      ? 'bg-slate-800/50 border-slate-700 hover:border-indigo-500/50 cursor-pointer'
+                      : 'bg-slate-800/30 border-slate-700/50 cursor-not-allowed opacity-60'
+                  }`}
+                  whileHover={lang.available ? { scale: 1.05, y: -5 } : {}}
+                  whileTap={lang.available ? { scale: 0.98 } : {}}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: lang.available ? 1 : 0.6, y: 0 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                  style={{
+                    boxShadow: lang.available ? `0 0 30px ${lang.shadowColor}` : 'none',
+                  }}
+                >
+                  {/* Glow effect on hover */}
+                  {lang.available && (
+                    <div 
+                      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{
+                        background: `radial-gradient(circle at center, ${lang.shadowColor} 0%, transparent 70%)`,
+                      }}
+                    />
+                  )}
+
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                      {lang.icon}
+                    </div>
+                    
+                    <h3 className={`text-xl font-bold mb-2 bg-gradient-to-r ${lang.gradient} bg-clip-text text-transparent`}>
+                      {lang.name}
+                    </h3>
+                    
+                    <p className="text-sm text-slate-400 text-center">
+                      {lang.description}
+                    </p>
+
+                    {!lang.available && (
+                      <span className="mt-3 px-3 py-1 bg-slate-700/50 text-slate-400 text-xs rounded-full">
+                        Yakında
+                      </span>
+                    )}
+
+                    {lang.available && (
+                      <motion.span 
+                        className="mt-3 px-4 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm rounded-full font-medium"
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        Başla →
+                      </motion.span>
+                    )}
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Features */}
+          <motion.div variants={itemVariants} className="mt-16">
+            <div className="flex flex-wrap justify-center gap-8 text-slate-400">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Sürükle & Bırak</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Gerçek Zamanlı Kod</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Anında Çalıştırma</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Dışa Aktarma</span>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+
+        {/* Scroll indicator */}
+        {showScrollHint && (
+          <motion.button
+            onClick={scrollToConverter}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400 hover:text-white transition-colors cursor-pointer z-20"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5 }}
+          >
+            <span className="text-sm">Kod Dönüştürücü için aşağı kaydırın</span>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </motion.div>
+          </motion.button>
+        )}
+      </section>
+
+      {/* Code Converter Section */}
+      <section 
+        ref={converterRef}
+        className="min-h-screen py-16 px-8 relative"
+      >
+        {/* Background decorations */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+          <motion.div
+            className="absolute top-40 right-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 12, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-40 left-20 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 15, repeat: Infinity }}
+          />
+        </div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-pink-500/20 rounded-full border border-slate-700/50 mb-6">
+              <span className="text-2xl">🔄</span>
+              <span className="text-sm font-medium text-slate-300">Kod Dönüştürücü</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+              Diller Arası Kod Dönüştürme
+            </h2>
+            
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              JavaScript, Python ve Java kodlarınızı kolayca birbirine dönüştürün.
+              Hazır şablonlar ve geçmiş dönüşümlerinize hızlıca erişin.
+            </p>
+          </motion.div>
+
+          {/* Converter Component */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-3xl p-6 md:p-8"
+          >
+            <CodeConverter />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-8 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+        </div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6"
+          >
+            {[
+              { value: '3+', label: 'Desteklenen Dil', icon: '🌐' },
+              { value: '30+', label: 'Node Tipi', icon: '🧩' },
+              { value: '100+', label: 'Şablon', icon: '📝' },
+              { value: '∞', label: 'Olasılık', icon: '✨' },
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="text-center p-6 bg-slate-800/30 border border-slate-700/50 rounded-2xl hover:border-slate-600 transition-colors"
+              >
+                <span className="text-3xl mb-3 block">{stat.icon}</span>
+                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-slate-400 mt-2">{stat.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 px-8 border-t border-slate-800">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-slate-500 text-sm">
+            FlowScript © 2026 • Görsel Programlama Aracı
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
