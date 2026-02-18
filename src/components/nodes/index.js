@@ -21,6 +21,20 @@ import ConsoleNode from './ConsoleNode';
 import TryCatchNode from './TryCatchNode';
 import FileReadNode from './FileReadNode';
 import FileWriteNode from './FileWriteNode';
+// JavaScript özel
+import PromiseNode from './PromiseNode';
+import EventNode from './EventNode';
+import DOMNode from './DOMNode';
+// Python özel
+import LambdaNode from './LambdaNode';
+import ListCompNode from './ListCompNode';
+import DecoratorNode from './DecoratorNode';
+import GeneratorNode from './GeneratorNode';
+// Java özel
+import ClassNode from './ClassNode';
+import InterfaceNode from './InterfaceNode';
+import StreamNode from './StreamNode';
+import ThreadNode from './ThreadNode';
 
 export const nodeTypes = {
   input: InputNode,
@@ -46,6 +60,30 @@ export const nodeTypes = {
   tryCatch: TryCatchNode,
   fileRead: FileReadNode,
   fileWrite: FileWriteNode,
+  // JavaScript özel
+  promise: PromiseNode,
+  event: EventNode,
+  dom: DOMNode,
+  // Python özel
+  lambda: LambdaNode,
+  listComp: ListCompNode,
+  decorator: DecoratorNode,
+  generator: GeneratorNode,
+  // Java özel
+  class: ClassNode,
+  interface: InterfaceNode,
+  stream: StreamNode,
+  thread: ThreadNode,
 };
 
-export { InputNode, FunctionNode, LogicNode, OutputNode, MathNode, TextNode, DelayNode, MergeNode, RandomNode, NoteNode, DateNode, JSONNode, ArrayNode, APINode, RegexNode, FetchNode, LoopNode, ConditionalNode, StorageNode, ConsoleNode, TryCatchNode, FileReadNode, FileWriteNode };
+export { 
+  InputNode, FunctionNode, LogicNode, OutputNode, MathNode, TextNode, DelayNode, MergeNode, 
+  RandomNode, NoteNode, DateNode, JSONNode, ArrayNode, APINode, RegexNode, FetchNode, 
+  LoopNode, ConditionalNode, StorageNode, ConsoleNode, TryCatchNode, FileReadNode, FileWriteNode,
+  // JavaScript özel
+  PromiseNode, EventNode, DOMNode,
+  // Python özel  
+  LambdaNode, ListCompNode, DecoratorNode, GeneratorNode,
+  // Java özel
+  ClassNode, InterfaceNode, StreamNode, ThreadNode
+};

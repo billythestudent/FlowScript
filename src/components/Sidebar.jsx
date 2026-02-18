@@ -53,6 +53,14 @@ const jsNodeCategories = [
     ]
   },
   {
+    name: 'JavaScript Özel',
+    nodes: [
+      { type: 'promise', label: 'Promise', color: 'sky', icon: '🔮', description: 'async/await' },
+      { type: 'event', label: 'Event', color: 'pink', icon: '🎯', description: 'addEventListener' },
+      { type: 'dom', label: 'DOM', color: 'cyan', icon: '🌳', description: 'querySelector' },
+    ]
+  },
+  {
     name: 'Diğer',
     nodes: [
       { type: 'random', label: 'Rastgele', color: 'violet', icon: '🎲', description: 'Math.random()' },
@@ -114,6 +122,15 @@ const pythonNodeCategories = [
     ]
   },
   {
+    name: 'Python Özel',
+    nodes: [
+      { type: 'lambda', label: 'Lambda', color: 'fuchsia', icon: '⚡', description: 'lambda x: x' },
+      { type: 'listComp', label: 'List Comp', color: 'lime', icon: '📝', description: '[x for x in list]' },
+      { type: 'decorator', label: 'Decorator', color: 'violet', icon: '🎀', description: '@decorator' },
+      { type: 'generator', label: 'Generator', color: 'teal', icon: '♾️', description: 'yield' },
+    ]
+  },
+  {
     name: 'Diğer',
     nodes: [
       { type: 'random', label: 'Rastgele', color: 'violet', icon: '🎲', description: 'random modülü' },
@@ -172,6 +189,15 @@ const javaNodeCategories = [
     nodes: [
       { type: 'api', label: 'Mock API', color: 'rose', icon: '🎭', description: 'Mock HTTP' },
       { type: 'fetch', label: 'HttpClient', color: 'emerald', icon: '🌐', description: 'HttpURLConnection' },
+    ]
+  },
+  {
+    name: 'Java Özel',
+    nodes: [
+      { type: 'class', label: 'Class', color: 'orange', icon: '📦', description: 'public class' },
+      { type: 'interface', label: 'Interface', color: 'blue', icon: '📋', description: 'interface' },
+      { type: 'stream', label: 'Stream', color: 'cyan', icon: '🌊', description: 'stream().map()' },
+      { type: 'thread', label: 'Thread', color: 'red', icon: '🧵', description: 'Thread/Runnable' },
     ]
   },
   {
